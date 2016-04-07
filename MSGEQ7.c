@@ -8,7 +8,7 @@ March 11 2016:  first addition
 #include "MSGEQ7.h"
 int done = 0;
 
-
+int amplitudes[7][2];//hard code 2 devices
 void MSGEQ7_init(){
   //set up pins for output
 	//clockInit();

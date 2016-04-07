@@ -8,8 +8,6 @@ March 11 2016:  first addition
 #include "IO_timing_configs.h"
      //int RESET,STROBE,DATA; //hard code pin interface
      //int devices;
-     static int amplitudes[7][2];//hard code 2 devices
-
      void MSGEQ7_init(void);
      void readValues(void);
      int getAmplitude(int frequency); //hard code for one device

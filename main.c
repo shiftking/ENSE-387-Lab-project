@@ -7,7 +7,7 @@ March 11 2016:  first addition
 */
 //char display[3][105];
 //green , red, blue
-char color[3][8] = {
+char color[8][3] = {
   {0,255,0}, //red
   {128,255,0}, //orange
   {255,255,51}, //yellow
@@ -19,7 +19,7 @@ char color[3][8] = {
 };
 
 int main(void){
-  int i,j,pixel;
+  int i,j;
   IO_init();
   MSGEQ7_init();
   showDisplay();
@@ -28,38 +28,39 @@ int main(void){
   while(1){
     readValues();
     for(i = 0;i<7;i++){
-      volumes[i][0] = (8192 / getAmplitude(i,0)) * 15;
-      volumes[i][1] = (8192 /getAmplitude(i,1)) * 15;
+      volumes[i][0] = 0 + ((15.0 - 0) / (8192.0 - 0)) * (volumes[i][0] - 0);
+      volumes[i][1] = 0 + ((15.0 - 0) / (8192.0 - 0)) * (volumes[i][1] - 0);
     }
-    pixel = 0 ;
-    for(i = 7;i>=0;i--){
+
+    for(i = 0;i < 7;i++){
       for(j = 0 ;j < 15;j++){
         if(j < volumes[i][0]){
-          setPixelColor(color[i][0],pixel ,0);
-          pixel++;
+          setPixelColor(color[i],pixel ,0);
+
         }else{
-          setPixelColor(color[7][0],pixel,0);
-          pixel++;
+          setPixelColor(color[7],i,j,0);
+
         }
       }
 
 
     }
-    pixel = 0;
-    for(i = 0;i>=7;i--){
-      for(j = 15 ;j >= 0 ;j--){
-        if( j > volumes[i][0]){
-          setPixelColor(color[i][0],pixel,0);
-          pixel++;
+
+    for(i = 0;i< 7;i++){
+      for(j = 0 ;j <15 ;j++){
+        if( j < volumes[i][1]){
+          setPixelColor(color[i],i,j,1);
+
         }else{
-          setPixelColor(color[7][0],pixel ,0);
-          pixel++;
+          setPixelColor(color[7],i,j ,1);
+
         }
       }
 
 
     }
-    showDisplay();
+    showDisplay(0);
+    showDisplay(1);
   }
 
 

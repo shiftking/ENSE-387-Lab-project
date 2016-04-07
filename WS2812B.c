@@ -5,7 +5,8 @@ Dylan Rush
 March 11 2016:  first addition
 
 */
-
+char display_left[3][105];
+char display_right[3][105];
 void WS2812b_Init(){
 
 
@@ -20,70 +21,83 @@ void WS2812b_Init(){
 
 }
 
-void showDisplay(){
+void showDisplay(int channel){
 
   int i,j,k;
   char buffer;
-  for(j = 0;j<105;j++){
-    for(i = 0;i<3;i++){
+  if(channel){
+    for(j = 0;j<105;j++){
+      for(i = 0;i<3;i++){
 
 
-      buffer= display_right[i][j];
+        buffer= display_right[i][j];
 
-      for(k = 0;k<8;k++){
+        for(k = 0;k<8;k++){
 
-        if(buffer & 0xFE){
-          GPIOC->ODR = GPIO_ODR_ODR0;
-          delay_wait(5);
-          GPIOC->ODR ^= GPIO_ODR_ODR0;
+          if(buffer & 0xFE){
+            GPIOC->ODR = GPIO_ODR_ODR0;
+            delay_wait(5);
+            GPIOC->ODR ^= GPIO_ODR_ODR0;
 
-          delay_wait(2);
-        }else{
-          GPIOC->ODR = GPIO_ODR_ODR0;
+            delay_wait(2);
+          }else{
+            GPIOC->ODR = GPIO_ODR_ODR0;
 
-          GPIOC->ODR ^= GPIO_ODR_ODR0;
+            GPIOC->ODR ^= GPIO_ODR_ODR0;
 
-          delay_wait(2);
+            delay_wait(2);
+          }
+          buffer = buffer >> 1;
         }
-        buffer = buffer >> 1;
-      }
 
-    }
-    for(i = 0;i<3;i++){
-      buffer= display_left[i][j];
-
-      for(k = 0;k<8;k++){
-
-        if(buffer & 0xFE){
-          GPIOC->ODR = GPIO_ODR_ODR1;
-          delay_wait(5);
-          GPIOC->ODR ^= GPIO_ODR_ODR1;
-
-          delay_wait(2);
-        }else{
-          GPIOC->ODR = GPIO_ODR_ODR1;
-
-          GPIOC->ODR ^= GPIO_ODR_ODR1;
-
-          delay_wait(2);
-        }
-        buffer = buffer >> 1;
       }
     }
+    GPIOC->ODR ^= GPIO_ODR_ODR0;
+    delay_wait(9000);
+    GPIOC->ODR = GPIO_ODR_ODR0;
+    delay_wait(9000);
+    GPIOC->ODR ^= GPIO_ODR_ODR0;
+    delay_wait(9000);
+  }else{
+    for(j = 0;j<105;j++){
+      for(i = 0;i<3;i++){
+
+
+        buffer= display_left[i][j];
+
+        for(k = 0;k<8;k++){
+
+          if(buffer & 0xFE){
+            GPIOC->ODR = GPIO_ODR_ODR1;
+            delay_wait(5);
+            GPIOC->ODR ^= GPIO_ODR_ODR1;
+
+            delay_wait(2);
+          }else{
+            GPIOC->ODR = GPIO_ODR_ODR1;
+
+            GPIOC->ODR ^= GPIO_ODR_ODR1;
+
+            delay_wait(2);
+          }
+          buffer = buffer >> 1;
+        }
+
+      }
+    }
+    GPIOC->ODR ^= GPIO_ODR_ODR1;
+    delay_wait(9000);
+    GPIOC->ODR = GPIO_ODR_ODR1;
+    delay_wait(9000);
+    GPIOC->ODR ^= GPIO_ODR_ODR1;
+    delay_wait(9000);
   }
-  GPIOC->ODR ^= GPIO_ODR_ODR0;
-  GPIOC->ODR ^= GPIO_ODR_ODR1;
-  delay_wait(900000);
-  GPIOC->ODR = GPIO_ODR_ODR0;
-  GPIOC->ODR = GPIO_ODR_ODR1;
-  delay_wait(9000);
-  GPIOC->ODR ^= GPIO_ODR_ODR0;
-  GPIOC->ODR ^= GPIO_ODR_ODR1;
+
   //GPIOC->ODR ^= GPIO_ODR_ODR1;
-  delay_wait(6000000);
+  ///delay_wait(6000000);
 
 }
-void setPixelColor(char pixel_color[],int pixel,int channel){
+void setPixelColor(char pixel_color[],int col,int row,int channel){
   int i;
   if(channel){
     for(i =0 ;i<3;i++){
