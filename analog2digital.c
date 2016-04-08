@@ -11,7 +11,7 @@
 
  #include "analog2digital.h"
 
- 
+ int out;
  //start conversion
 void a2d_start(uint16_t channel)
 {
@@ -34,13 +34,13 @@ void a2d_start(uint16_t channel)
 uint16_t a2d_read()
 {
      
-    uint16_t out;
+    
     while (!(ADC1->SR & ADC_SR_EOC))
     {
          
     }
      
-    out = ADC1->DR;
+    out = ADC1->DR & 0xF0;
      
     return out;
      
@@ -54,7 +54,7 @@ uint16_t a2d_read()
  
     GPIOA->CRL &=  ~GPIO_CRL_CNF0 & ~GPIO_CRL_MODE0; 
      
-    ADC1->CR2 |= 0x005; 
+    ADC1->CR2 |= 0x005;  //turn reset calibration on, and wake up the ADC
      
     ADC1->SMPR2 |= 0xFFF; 
      
